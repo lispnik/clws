@@ -1,0 +1,29 @@
+
+td.size {
+    text-align: right;
+}
+
+tr.entry>td.file:before {
+    margin-right: 0.5em;
+    content: url(images/file.png);
+}
+
+tr.entry>td.folder:before {
+    margin-right: 0.5em;
+    content: url(images/folder.png);
+}
+
+tr.entry>td.parent:before {
+    margin-right: 0.5em;
+    content: url(images/parent.png);
+}
+
+tr.entry>td.folder>a:after {
+    content: '/';
+}
+
+/* forms */
+
+label {
+    display: block;
+}
