@@ -1,9 +1,10 @@
 
 (ns clws.util
-  (:use [clojure.java.io :only [file]]))
+  (:require clojure.java.io))
 
 (defn- make-path [file]
-  {:name (.getName file)
+  {:file (clojure.java.io/file file)
+   :name (.getName file)
    :size (.length file)
    :is-directory (.isDirectory file)
    :last-modified (java.util.Date. (.lastModified file))
@@ -12,7 +13,7 @@
 
 (defn list-path
   [path]
-  (let [p (file path)]
+  (let [p (clojure.java.io/file path)]
     (if (.isDirectory p)
       (sort-by :name (map make-path
 			  (seq (.listFiles p))))

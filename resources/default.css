@@ -8,7 +8,7 @@ tr.entry>td.file:before {
     content: url(images/file.png);
 }
 
-tr.entry>td.folder:before {
+tr.entry>td.dir:before {
     margin-right: 0.5em;
     content: url(images/folder.png);
 }
@@ -18,7 +18,7 @@ tr.entry>td.parent:before {
     content: url(images/parent.png);
 }
 
-tr.entry>td.folder>a:after {
+tr.entry>td.dir>a:after {
     content: '/';
 }
 

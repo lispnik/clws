@@ -1,33 +1,30 @@
 
 (ns clws.view
-  (:require [net.cgrand.enlive-html :as html])
-  (:use [clws.util]))
+  (:use net.cgrand.enlive-html)
+  (:use clws.util))
 
-(html/deftemplate index-template "index.html"
+(deftemplate index-template "index.html"
   [path & body-fns]
-  [#{:title :h1}] (html/content (str "Index of " path))
-  [[:tr.entry (html/nth-of-type 1)]] (apply html/do-> body-fns))
+  [#{:title :h1}] (content (str "Index of " path))
+  [:.entries] (apply do-> body-fns))
 
-(index-template "fuck")
-
-;;; [[:.content (nth-of-type 1)] :> first-child]
-
-(html/defsnippet entry-snippet "index.html" [:.entry] 
+(defsnippet entry-snippet "index.html" [:.entries :> first-child] 
   [file]
-  [:.file :> :a] (html/do->
-		  (html/set-attr :href (file :name))
-		  (html/content (file :name)))
-  [:img.icon] (html/set-attr :alt (if (file :is-directory) "dir" "file"))
-  [:.size] (html/content (str (file :size)))
-  [:.date] (html/content (str (file :last-modified))))
+  [:a] (do->
+	(set-attr :href (file :name))
+	(content (file :name)))
+  [[:td (nth-of-type 1)]] (set-attr :class (if (file :is-directory) "dir" "file"))
+  [:.size] (content (str (file :size)))
+  [:.date] (content (str (file :last-modified))))
 
 (defn index-view
   ([title path]
      (index-template
       title
-      (html/content (map entry-snippet
-			 (list-path path))))))
+      (content (map entry-snippet
+		    (list-path path))))))
 
 (comment
-  (apply str (index-view "lol" "/etc")))
+  (apply str (index-view "lol" "/etc"))
+  (first (list-path "/etc/")))
 

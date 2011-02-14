@@ -12,16 +12,19 @@
 	compojure.route)
   (:use [clws.view :only [index-view]]))
 
+;;; FIXME this needs to be created at runtime
+
 (defroutes clws
-  (GET "/" [] (index-view "/etc" "/etc")))
+  (GET "/clws" _ (index-view "/etc" "/etc")))
 
 (defn make-app [targets]
   (let [target (first targets)]
     (-> #'clws
+	(wrap-file "resources")
 	(wrap-file target)
 	(wrap-file-info)
-	(wrap-reload '(clws.core))
-	(wrap-lint)
+	(wrap-reload '(clws.core clws.view clws.util clws.mime))
+	;; (wrap-lint)
 	(wrap-stacktrace))))
 
 (defn start
@@ -33,8 +36,9 @@
   ([address port targets]
      (start address port targets false false false)))
 
-(defonce server (start "localhost" 4580 ["/etc/"]))
-
 (comment
-  (.stop server))
+ (def server (start "localhost" 4580 ["/etc/"]))
+ (.stop server))
+
+
 
