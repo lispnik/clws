@@ -18,3 +18,25 @@
       (sort-by :name (map make-path
 			  (seq (.listFiles p))))
       [(p)])))
+
+(defn relative-time
+  ([target relative-to units]
+     (let [diff (- (.getTime target) (.getTime relative-to))]
+       (loop [a (Math/abs diff)
+	      u units
+	      r []]
+	 (if (zero? (count u))
+	   [(if (neg? diff) :before :after) r]
+	   (let [p (reduce * u)]
+	     (let [d (long (/ a p))]
+	       (recur (- a (* d p))
+		      (rest u)
+		      (conj r d))))))))
+  ([target relative-to]
+     (relative-time target (java.util.Date.) [24 60 60 1000 1]))
+  ([target]
+     (relative-time target (java.util.Date.))))
+
+(comment (relative-time (java.util.Date. 111 1 1)))
+
+
